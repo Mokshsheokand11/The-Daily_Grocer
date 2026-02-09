@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperMarket Billing System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🛍️ The_Daily_Grocer</h1>
+                <p class="tagline">Your Trusted Grocery Store</p>
+            </div>
+            <div class="header-actions">
+                <button class="cart-btn" id="cartBtn">
+                    🛒 Cart <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Products Section -->
+            <section class="products-section">
+                <div class="section-header">
+                    <h2>Available Products</h2>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search products...">
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Cart Panel -->
+            <aside class="cart-panel" id="cartPanel">
+                <div class="cart-header">
+                    <h3>Shopping Cart</h3>
+                    <button class="close-btn" id="closeCartBtn">&times;</button>
+                </div>
+                <div class="cart-items" id="cartItems">
+                    <p class="empty-cart">Your cart is empty</p>
+                </div>
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">Rs. 0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>GST (16%):</span>
+                        <span id="gst">Rs. 0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">Rs. 0.00</span>
+                    </div>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+                <button class="clear-cart-btn" id="clearCartBtn">Clear Cart</button>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content checkout-modal">
+            <h2>Checkout</h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="customerName">Customer Name:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number:</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Generate Bill</button>
+                    <button type="button" class="btn-secondary" onclick="closeCheckoutModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bill Modal -->
+    <div class="modal" id="billModal">
+        <div class="modal-content bill-modal">
+            <button class="close-modal-btn" onclick="closeBillModal()">&times;</button>
+            <div id="billContent">
+                <!-- Bill will be generated here -->
+            </div>
+            <div class="bill-actions">
+                <button class="btn-primary" onclick="printBill()">🖨️ Print Bill</button>
+                <button class="btn-secondary" onclick="downloadBill()">📥 Download PDF</button>
+                <button class="btn-secondary" onclick="newTransaction()">New Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

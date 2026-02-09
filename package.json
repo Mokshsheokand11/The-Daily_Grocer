@@ -1,0 +1,17 @@
+{
+  "name": "supermarket-billing",
+  "version": "1.0.0",
+  "description": "The_Daily_Grocer - Supermarket Billing System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["supermarket", "billing", "grocer"],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

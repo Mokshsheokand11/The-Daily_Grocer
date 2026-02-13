@@ -30,6 +30,7 @@ const productsGrid = document.getElementById("productsGrid");
 const cartBtn = document.getElementById("cartBtn");
 const closeCartBtn = document.getElementById("closeCartBtn");
 const cartPanel = document.getElementById("cartPanel");
+const cartBackdrop = document.getElementById("cartBackdrop");
 const cartItems = document.getElementById("cartItems");
 const cartCount = document.getElementById("cartCount");
 const searchInput = document.getElementById("searchInput");
@@ -53,6 +54,9 @@ function attachEventListeners() {
     checkoutBtn.addEventListener("click", openCheckoutModal);
     clearCartBtn.addEventListener("click", clearCart);
     checkoutForm.addEventListener("submit", generateBill);
+
+    // Close cart panel when clicking on backdrop
+    cartBackdrop.addEventListener("click", closeCartPanel);
 
     // Close cart panel when clicking outside
     document.addEventListener("click", (e) => {
@@ -247,6 +251,7 @@ function updateCartSummary() {
 function toggleCartPanel() {
     cartPanel.classList.toggle("show");
     if (window.innerWidth <= 768) {
+        cartBackdrop.classList.toggle("show");
         document.body.style.overflow = cartPanel.classList.contains("show") ? "hidden" : "auto";
     }
 }
@@ -254,6 +259,7 @@ function toggleCartPanel() {
 // Close Cart Panel
 function closeCartPanel() {
     cartPanel.classList.remove("show");
+    cartBackdrop.classList.remove("show");
     document.body.style.overflow = "auto";
 }
 

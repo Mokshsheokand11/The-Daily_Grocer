@@ -18,6 +18,9 @@
                 <button class="cart-btn" id="cartBtn">
                     🛒 Cart <span class="cart-count" id="cartCount">0</span>
                 </button>
+                <button class="history-btn" id="historyBtn" onclick="openBillHistoryModal()">
+                    📜 History
+                </button>
             </div>
         </header>
 
@@ -96,8 +99,26 @@
             </div>
             <div class="bill-actions">
                 <button class="btn-primary" onclick="printBill()">🖨️ Print Bill</button>
-                <button class="btn-secondary" onclick="downloadBill()">📥 Download PDF</button>
-                <button class="btn-secondary" onclick="newTransaction()">New Transaction</button>
+                <button class="btn-secondary" onclick="downloadBillPDF()">📥 Download PDF</button>
+                <button class="btn-secondary" onclick="emailBill()">📧 Email Bill</button>
+                <button class="btn-secondary" onclick="newTransaction()">✨ New Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bill History Modal -->
+    <div class="modal" id="billHistoryModal">
+        <div class="modal-content bill-history-modal">
+            <div class="history-header">
+                <h2>📜 Bill History</h2>
+                <button class="close-modal-btn" onclick="closeBillHistoryModal()">&times;</button>
+            </div>
+            <div class="history-filters">
+                <input type="text" id="historySearchInput" placeholder="Search by customer name...">
+                <button class="btn-secondary" onclick="clearBillHistory()" title="Clear all bills">🗑️ Clear History</button>
+            </div>
+            <div id="billHistoryContainer" class="bill-history-container">
+                <!-- Bills will be loaded here -->
             </div>
         </div>
     </div>

@@ -39,6 +39,7 @@ const clearCartBtn = document.getElementById("clearCartBtn");
 const checkoutModal = document.getElementById("checkoutModal");
 const checkoutForm = document.getElementById("checkoutForm");
 const billModal = document.getElementById("billModal");
+const billHistoryModal = document.getElementById("billHistoryModal");
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
@@ -54,6 +55,24 @@ function attachEventListeners() {
     checkoutBtn.addEventListener("click", openCheckoutModal);
     clearCartBtn.addEventListener("click", clearCart);
     checkoutForm.addEventListener("submit", generateBill);
+    
+    // History search
+    const historySearchInput = document.getElementById("historySearchInput");
+    if (historySearchInput) {
+        historySearchInput.addEventListener("input", (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const historyItems = document.querySelectorAll(".bill-history-item");
+            
+            historyItems.forEach(item => {
+                const customerName = item.querySelector(".bill-history-customer").textContent.toLowerCase();
+                if (customerName.includes(searchTerm)) {
+                    item.style.display = "";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    }
 
     // Close cart panel when clicking on backdrop
     cartBackdrop.addEventListener("click", closeCartPanel);
@@ -75,6 +94,12 @@ function attachEventListeners() {
     billModal.addEventListener("click", (e) => {
         if (e.target === billModal) {
             closeBillModal();
+        }
+    });
+
+    billHistoryModal.addEventListener("click", (e) => {
+        if (e.target === billHistoryModal) {
+            closeBillHistoryModal();
         }
     });
 }
@@ -393,6 +418,9 @@ function generateBill(e) {
         grandTotal
     };
 
+    // Save to history
+    saveBillToHistory(window.billData);
+
     closeCheckoutModal();
     billModal.classList.add("show");
     document.body.style.overflow = "hidden";
@@ -409,38 +437,289 @@ function printBill() {
     window.print();
 }
 
-// Download Bill as PDF (requires jsPDF library)
-function downloadBill() {
-    const { customerName, date, items, subtotal, gst, grandTotal } = window.billData;
+// Bill History Management
+function saveBillToHistory(billData) {
+    let billHistory = JSON.parse(localStorage.getItem("billHistory")) || [];
+    
+    const billRecord = {
+        id: Date.now(),
+        ...billData,
+        savedAt: new Date().toISOString()
+    };
+    
+    billHistory.push(billRecord);
+    localStorage.setItem("billHistory", JSON.stringify(billHistory));
+    showNotification("Bill saved to history!");
+}
 
-    let billText = "==== SUPERMARKET BILL ====\n\n";
-    billText += `Customer: ${customerName}\n`;
-    billText += `Date: ${date}\n\n`;
-    billText += "Items:\n";
-    billText += "-".repeat(50) + "\n";
+function getBillHistory() {
+    return JSON.parse(localStorage.getItem("billHistory")) || [];
+}
+
+function openBillHistoryModal() {
+    const history = getBillHistory();
+    const historyContainer = document.getElementById("billHistoryContainer");
+    
+    if (history.length === 0) {
+        historyContainer.innerHTML = '<p class="empty-history">📭 No bills in history</p>';
+    } else {
+        historyContainer.innerHTML = history.slice().reverse().map((bill, index) => `
+            <div class="bill-history-item">
+                <div class="bill-history-info">
+                    <div class="bill-history-customer">👤 ${escapseHTML(bill.customerName)}</div>
+                    <div class="bill-history-phone">📞 ${bill.customerPhone}</div>
+                    <div class="bill-history-amount">💰 Rs. ${bill.grandTotal.toFixed(2)}</div>
+                    <div class="bill-history-date">📅 ${new Date(bill.date).toLocaleString()}</div>
+                </div>
+                <div class="bill-history-actions">
+                    <button class="btn-small" onclick="viewBillFromHistory(${bill.id})">👁️ View</button>
+                    <button class="btn-small" onclick="downloadBillFromHistory(${bill.id})">📥 Download</button>
+                    <button class="btn-small danger" onclick="deleteBillFromHistory(${bill.id})">🗑️ Delete</button>
+                </div>
+            </div>
+        `).join("");
+    }
+    
+    billHistoryModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+function closeBillHistoryModal() {
+    billHistoryModal.classList.remove("show");
+    document.body.style.overflow = "auto";
+}
+
+function viewBillFromHistory(billId) {
+    const history = getBillHistory();
+    const bill = history.find(b => b.id === billId);
+    
+    if (!bill) {
+        showNotification("Bill not found");
+        return;
+    }
+    
+    // Generate bill HTML from history
+    const billHTML = `
+        <div class="bill-header">
+            <h2>THE_DAILY_GROCER BILL</h2>
+            <p>Thank you for your purchase!</p>
+            <p style="color: #9b59b6; font-size: 12px; margin-top: 5px;">📋 From History</p>
+        </div>
+
+        <div class="bill-info">
+            <div class="bill-info-item">
+                <span class="bill-info-label">Customer Name:</span>
+                <span class="bill-info-value">${escapseHTML(bill.customerName)}</span>
+            </div>
+            <div class="bill-info-item">
+                <span class="bill-info-label">Phone:</span>
+                <span class="bill-info-value">${bill.customerPhone}</span>
+            </div>
+            <div class="bill-info-item">
+                <span class="bill-info-label">Date & Time:</span>
+                <span class="bill-info-value">${bill.date}</span>
+            </div>
+        </div>
+
+        <div class="bill-items">
+            <div class="bill-items-header">
+                <span>Item</span>
+                <span>Quantity</span>
+                <span>Price</span>
+                <span>Total</span>
+            </div>
+            ${bill.items.map(item => `
+                <div class="bill-item-row">
+                    <span>${item.name}</span>
+                    <span>${item.quantity}</span>
+                    <span>Rs. ${item.price.toFixed(2)}</span>
+                    <span>Rs. ${item.total.toFixed(2)}</span>
+                </div>
+            `).join("")}
+        </div>
+
+        <div class="bill-calculations">
+            <div class="calc-row">
+                <span>Subtotal:</span>
+                <span>Rs. ${bill.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="calc-row">
+                <span>GST (16%):</span>
+                <span>Rs. ${bill.gst.toFixed(2)}</span>
+            </div>
+            <div class="calc-row total">
+                <span>Total Payable:</span>
+                <span>Rs. ${bill.grandTotal.toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById("billContent").innerHTML = billHTML;
+    window.billData = bill;
+    
+    closeBillHistoryModal();
+    billModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+function downloadBillFromHistory(billId) {
+    const history = getBillHistory();
+    const bill = history.find(b => b.id === billId);
+    
+    if (!bill) {
+        showNotification("Bill not found");
+        return;
+    }
+    
+    downloadBillPDF(bill);
+}
+
+function deleteBillFromHistory(billId) {
+    if (confirm("Are you sure you want to delete this bill?")) {
+        let billHistory = getBillHistory();
+        billHistory = billHistory.filter(b => b.id !== billId);
+        localStorage.setItem("billHistory", JSON.stringify(billHistory));
+        showNotification("Bill deleted from history");
+        openBillHistoryModal(); // Refresh the view
+    }
+}
+
+function clearBillHistory() {
+    if (confirm("Are you sure you want to clear ALL bill history? This cannot be undone.")) {
+        localStorage.removeItem("billHistory");
+        showNotification("All bill history cleared");
+        openBillHistoryModal(); // Refresh the view
+    }
+}
+
+// Download Bill as PDF/TXT
+function downloadBillPDF(bill = window.billData) {
+    if (!bill) {
+        showNotification("No bill data found");
+        return;
+    }
+    
+    const { customerName, customerPhone, date, items, subtotal, gst, grandTotal } = bill;
+
+    let billText = "";
+    billText += "╔═══════════════════════════════════════════════╗\n";
+    billText += "║      THE_DAILY_GROCER - SUPERMARKET BILL      ║\n";
+    billText += "╚═══════════════════════════════════════════════╝\n\n";
+    
+    billText += "─".repeat(50) + "\n";
+    billText += `CUSTOMER NAME   : ${customerName}\n`;
+    billText += `PHONE NUMBER    : ${customerPhone}\n`;
+    billText += `DATE & TIME     : ${date}\n`;
+    billText += "─".repeat(50) + "\n\n";
+    
+    billText += "ITEMS:\n";
+    billText += "─".repeat(50) + "\n";
+    billText += "ITEM{18}QTY{8}PRICE{12}TOTAL\n";
+    billText += "─".repeat(50) + "\n";
 
     items.forEach(item => {
-        billText += `${item.name} x${item.quantity} = Rs. ${item.total.toFixed(2)}\n`;
+        const itemName = item.name.padEnd(18);
+        const qty = String(item.quantity).padEnd(8);
+        const price = `Rs. ${item.price.toFixed(2)}`.padEnd(12);
+        const total = `Rs. ${item.total.toFixed(2)}`;
+        billText += `${itemName}${qty}${price}${total}\n`;
     });
 
-    billText += "-".repeat(50) + "\n";
-    billText += `Subtotal: Rs. ${subtotal.toFixed(2)}\n`;
-    billText += `GST (16%): Rs. ${gst.toFixed(2)}\n`;
-    billText += `Total: Rs. ${grandTotal.toFixed(2)}\n\n`;
-    billText += "Thank you for shopping!\n";
+    billText += "\n" + "─".repeat(50) + "\n";
+    billText += `Subtotal (Before GST)  : Rs. ${subtotal.toFixed(2)}\n`;
+    billText += `GST (16%)              : Rs. ${gst.toFixed(2)}\n`;
+    billText += "═".repeat(50) + "\n";
+    billText += `TOTAL PAYABLE          : Rs. ${grandTotal.toFixed(2)}\n`;
+    billText += "═".repeat(50) + "\n\n";
+    billText += "   Thank you for your purchase!\n";
+    billText += "   Visit us again soon! 🛍️\n";
+    billText += "\n╔═══════════════════════════════════════════════╗\n";
+    billText += "║    www.thedailygrocer.com                     ║\n";
+    billText += "╚═══════════════════════════════════════════════╝\n";
 
     // Create blob and download
-    const blob = new Blob([billText], { type: "text/plain" });
+    const blob = new Blob([billText], { type: "text/plain; charset=utf-8" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `bill_${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `bill_${customerName.replace(/\s+/g, '_')}_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
     window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    document.body.removeChild(link);
 
-    showNotification("Bill downloaded!");
+    showNotification("✅ Bill downloaded successfully!");
+}
+
+// Email Bill
+function emailBill(bill = window.billData) {
+    if (!bill) {
+        showNotification("No bill data found");
+        return;
+    }
+
+    const emailModal = document.createElement("div");
+    emailModal.className = "modal";
+    emailModal.innerHTML = `
+        <div class="modal-content email-modal">
+            <h3>📧 Email Bill</h3>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label for="emailAddress">Email Address:</label>
+                    <input type="email" id="emailAddress" value="${bill.customerPhone}" placeholder="Enter email" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Send Bill</button>
+                    <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(emailModal);
+    emailModal.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 3000;";
+    emailModal.classList.add("show");
+    
+    emailModal.querySelector("#emailForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailAddress").value;
+        
+        try {
+            const response = await fetch("/api/send-bill", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    bill: {
+                        customerName: bill.customerName,
+                        customerPhone: bill.customerPhone,
+                        date: bill.date,
+                        items: bill.items,
+                        subtotal: bill.subtotal,
+                        gst: bill.gst,
+                        grandTotal: bill.grandTotal
+                    }
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification("✅ Bill sent to " + email);
+                emailModal.remove();
+            } else {
+                showNotification("❌ Failed to send email: " + result.error);
+            }
+        } catch (error) {
+            showNotification("❌ Error sending email: " + error.message);
+        }
+    });
+    
+    emailModal.addEventListener("click", (e) => {
+        if (e.target === emailModal) {
+            emailModal.remove();
+        }
+    });
 }
 
 // New Transaction

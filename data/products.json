@@ -18,5 +18,15 @@
     { "id": 17, "name": "Shampoo", "price": 110.0, "icon": "🧴", "stock": 20 },
     { "id": 18, "name": "Toothpaste", "price": 50.0, "icon": "🪥", "stock": 40 },
     { "id": 19, "name": "Biscuits", "price": 30.0, "icon": "🍪", "stock": 60 },
-    { "id": 20, "name": "Juice", "price": 60.0, "icon": "🧃", "stock": 45 }
+    { "id": 20, "name": "Juice", "price": 60.0, "icon": "🧃", "stock": 45 },
+    { "id": 21, "name": "Chocolate", "price": 150.0, "icon": "🍫", "stock": 50 },
+    { "id": 22, "name": "Chips", "price": 40.0, "icon": "🍟", "stock": 100 },
+    { "id": 23, "name": "Yogurt", "price": 35.0, "icon": "🍦", "stock": 60 },
+    { "id": 24, "name": "Honey", "price": 250.0, "icon": "🍯", "stock": 15 },
+    { "id": 25, "name": "Pasta", "price": 60.0, "icon": "🍝", "stock": 45 },
+    { "id": 26, "name": "Tomato", "price": 40.0, "icon": "🍅", "stock": 80 },
+    { "id": 27, "name": "Potato", "price": 30.0, "icon": "🥔", "stock": 120 },
+    { "id": 28, "name": "Onion", "price": 35.0, "icon": "🧅", "stock": 90 },
+    { "id": 29, "name": "Garlic", "price": 20.0, "icon": "🧄", "stock": 50 },
+    { "id": 30, "name": "Ginger", "price": 30.0, "icon": "🫚", "stock": 40 }
 ]

@@ -26,7 +26,28 @@ const productModal = document.getElementById("productModal");
 document.addEventListener("DOMContentLoaded", async () => {
     await fetchProducts();
     attachEventListeners();
+    prepopulateCart(); // Added this
 });
+
+// Pre-populate Cart with some items
+function prepopulateCart() {
+    const itemsToAdd = [
+        { id: 3, quantity: 2 },  // Milk
+        { id: 5, quantity: 1 },  // Bread
+        { id: 21, quantity: 3 }  // Chocolate
+    ];
+
+    itemsToAdd.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        if (product) {
+            cart.set(product.id, { name: product.name, price: product.price, quantity: item.quantity });
+        }
+    });
+
+    updateCart();
+    // Show the cart panel
+    toggleCartPanel();
+}
 
 // Fetch Products from API
 async function fetchProducts() {

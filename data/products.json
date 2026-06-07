@@ -18,7 +18,7 @@
         "name": "Milk",
         "price": 50,
         "icon": "🥛",
-        "stock": 25
+        "stock": 23
     },
     {
         "id": 4,
@@ -32,7 +32,7 @@
         "name": "Bread",
         "price": 40,
         "icon": "🍞",
-        "stock": 32
+        "stock": 31
     },
     {
         "id": 6,
@@ -144,7 +144,7 @@
         "name": "Chocolate",
         "price": 150,
         "icon": "🍫",
-        "stock": 47
+        "stock": 44
     },
     {
         "id": 22,

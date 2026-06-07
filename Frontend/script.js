@@ -85,6 +85,12 @@ function attachEventListeners() {
         });
     }
 
+    // History Search
+    const historySearchInput = document.getElementById("historySearchInput");
+    if (historySearchInput) {
+        historySearchInput.addEventListener("input", handleHistorySearch);
+    }
+
     // Modal click-outside
     [checkoutModal, billModal, billHistoryModal, adminLoginModal, adminDashboardModal, productModal].forEach(modal => {
         modal.addEventListener("click", (e) => {
@@ -308,25 +314,76 @@ async function openBillHistoryModal() {
     try {
         const response = await fetch('/api/bills');
         const history = await response.json();
-        const container = document.getElementById("billHistoryContainer");
+        window.lastFetchedBills = history;
         
-        if (history.length === 0) {
-            container.innerHTML = "<p>No transaction history found.</p>";
-        } else {
-            container.innerHTML = history.reverse().map(bill => `
-                <div class="history-item">
-                    <div>
-                        <strong>${bill.customerName}</strong><br>
-                        <small>${bill.date}</small>
-                    </div>
-                    <div>Rs. ${bill.grandTotal.toFixed(2)}</div>
-                    <button class="btn-small" onclick='showBill(${JSON.stringify(bill)})'>View</button>
-                </div>
-            `).join('');
+        // Reset search filter input
+        const historySearchInput = document.getElementById("historySearchInput");
+        if (historySearchInput) {
+            historySearchInput.value = "";
         }
+        
+        renderBillHistoryList(history);
         billHistoryModal.classList.add("show");
     } catch (error) {
         showNotification("❌ Failed to load history");
+    }
+}
+
+function renderBillHistoryList(historyList) {
+    const container = document.getElementById("billHistoryContainer");
+    if (!historyList || historyList.length === 0) {
+        container.innerHTML = "<p>No transaction history found.</p>";
+    } else {
+        container.innerHTML = historyList.slice().reverse().map(bill => `
+            <div class="history-item">
+                <div>
+                    <strong>${bill.customerName}</strong><br>
+                    <small>${bill.date}</small>
+                </div>
+                <div>Rs. ${bill.grandTotal.toFixed(2)}</div>
+                <button class="btn-small" onclick="showBillById(${bill.id})">View</button>
+            </div>
+        `).join('');
+    }
+}
+
+function showBillById(id) {
+    const bill = (window.lastFetchedBills || []).find(b => b.id === id);
+    if (bill) {
+        showBill(bill);
+    } else {
+        showNotification("❌ Bill not found");
+    }
+}
+
+function handleHistorySearch() {
+    const term = document.getElementById("historySearchInput").value.toLowerCase().trim();
+    const filtered = (window.lastFetchedBills || []).filter(bill => 
+        bill.customerName.toLowerCase().includes(term) ||
+        bill.customerPhone.toLowerCase().includes(term)
+    );
+    renderBillHistoryList(filtered);
+}
+
+async function clearBillHistory() {
+    if (window.lastFetchedBills && window.lastFetchedBills.length === 0) {
+        showNotification("ℹ️ Bill history is already empty");
+        return;
+    }
+    if (!confirm("Are you sure you want to clear all bill history? This cannot be undone.")) return;
+    try {
+        const response = await fetch('/api/bills', { method: 'DELETE' });
+        const res = await response.json();
+        if (res.success) {
+            showNotification("🗑️ Bill history cleared");
+            window.lastFetchedBills = [];
+            renderBillHistoryList([]);
+        } else {
+            showNotification("❌ Failed to clear history: " + res.error);
+        }
+    } catch (error) {
+        console.error(error);
+        showNotification("❌ Error clearing history");
     }
 }
 
@@ -508,11 +565,13 @@ function showNotification(msg) {
 }
 
 function toggleCartPanel() {
-    cartPanel.classList.toggle("show");
+    const isOpen = cartPanel.classList.toggle("show");
+    cartBackdrop.classList.toggle("show", isOpen);
 }
 
 function closeCartPanel() {
     cartPanel.classList.remove("show");
+    cartBackdrop.classList.remove("show");
 }
 
 function handleSearch() {
@@ -525,5 +584,114 @@ function closeBillHistoryModal() { billHistoryModal.classList.remove("show"); }
 function closeAdminDashboardModal() { adminDashboardModal.classList.remove("show"); }
 
 function printBill() { window.print(); }
-function downloadBillPDF() { /* Simulation already exists in previous code, can be merged if needed */ }
-function emailBill() { /* Similar to checkout logic */ }
+
+function downloadBillPDF(bill = window.currentBill) {
+    if (!bill) {
+        showNotification("❌ No bill data found");
+        return;
+    }
+    
+    const { customerName, customerPhone, date, items, subtotal, gst, grandTotal } = bill;
+
+    let billText = "";
+    billText += "╔═══════════════════════════════════════════════╗\n";
+    billText += "║      THE_DAILY_GROCER - SUPERMARKET BILL      ║\n";
+    billText += "╚═══════════════════════════════════════════════╝\n\n";
+    
+    billText += "─".repeat(50) + "\n";
+    billText += `CUSTOMER NAME   : ${customerName}\n`;
+    billText += `PHONE NUMBER    : ${customerPhone}\n`;
+    billText += `DATE & TIME     : ${date}\n`;
+    billText += "─".repeat(50) + "\n\n";
+    
+    billText += "ITEMS:\n";
+    billText += "─".repeat(50) + "\n";
+    billText += "ITEM              QTY     PRICE       TOTAL\n";
+    billText += "─".repeat(50) + "\n";
+
+    items.forEach(item => {
+        const itemName = item.name.padEnd(18);
+        const qty = String(item.quantity).padEnd(8);
+        const price = `Rs. ${item.price.toFixed(2)}`.padEnd(12);
+        const total = `Rs. ${item.total.toFixed(2)}`;
+        billText += `${itemName}${qty}${price}${total}\n`;
+    });
+
+    billText += "\n" + "─".repeat(50) + "\n";
+    billText += `Subtotal (Before GST)  : Rs. ${subtotal.toFixed(2)}\n`;
+    billText += `GST (16%)              : Rs. ${gst.toFixed(2)}\n`;
+    billText += "═".repeat(50) + "\n";
+    billText += `TOTAL PAYABLE          : Rs. ${grandTotal.toFixed(2)}\n`;
+    billText += "═".repeat(50) + "\n\n";
+    billText += "   Thank you for your purchase!\n";
+    billText += "   Visit us again soon! 🛍️\n";
+    billText += "\n╔═══════════════════════════════════════════════╗\n";
+    billText += "║    www.thedailygrocer.com                     ║\n";
+    billText += "╚═══════════════════════════════════════════════╝\n";
+
+    const blob = new Blob([billText], { type: "text/plain; charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `bill_${customerName.replace(/\s+/g, '_')}_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+
+    showNotification("✅ Bill downloaded successfully!");
+}
+
+function emailBill(bill = window.currentBill) {
+    if (!bill) {
+        showNotification("❌ No bill data found");
+        return;
+    }
+
+    const email = prompt("Enter email address to send the bill:");
+    if (!email) return;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address!");
+        return;
+    }
+
+    fetch("/api/send-bill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            email,
+            bill: {
+                customerName: bill.customerName,
+                customerPhone: bill.customerPhone,
+                date: bill.date,
+                items: bill.items,
+                subtotal: bill.subtotal,
+                gst: bill.gst,
+                grandTotal: bill.grandTotal
+            }
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            showNotification("✅ Bill sent to " + email);
+        } else {
+            showNotification("❌ Failed to send email: " + result.error);
+        }
+    })
+    .catch(error => {
+        showNotification("❌ Error sending email: " + error.message);
+    });
+}
+
+function newTransaction() {
+    cart.clear();
+    updateCart();
+    closeBillModal();
+    checkoutForm.reset();
+    searchInput.value = "";
+    renderProducts(products);
+    showNotification("✨ New transaction started");
+}

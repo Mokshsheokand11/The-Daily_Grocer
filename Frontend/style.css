@@ -545,3 +545,386 @@ body {
     margin-bottom: 0.5rem;
     font-style: italic;
 }
+
+/* Form Groups & Inputs */
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--dark-soft);
+}
+
+.form-group input {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* General Buttons */
+.btn-primary, .btn-secondary {
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    color: var(--white);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover), #7c3aed);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+    background: var(--light);
+    color: var(--dark);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--border);
+    transform: translateY(-2px);
+}
+
+/* Modals & Dialog Controls */
+.close-modal-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #64748b;
+    line-height: 1;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 99px;
+    transition: all 0.2s;
+}
+
+.close-modal-btn:hover {
+    background: var(--light);
+    color: var(--danger);
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #64748b;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--danger);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clear-cart-btn {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--danger);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.clear-cart-btn:hover {
+    background: #fee2e2;
+    border-color: var(--danger);
+}
+
+/* Bill Modal Layouts */
+.bill-modal {
+    max-width: 600px;
+    text-align: center;
+}
+
+.bill-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary);
+}
+
+.bill-header h2 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.bill-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    background: var(--light);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.bill-info p {
+    margin: 0;
+}
+
+.bill-summary {
+    text-align: right;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--primary);
+}
+
+.bill-summary p {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+}
+
+.bill-summary h3 {
+    font-size: 1.4rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.bill-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Admin Dashboard & Bill History Search controls */
+.dashboard-header, .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.history-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+#historySearchInput {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-family: inherit;
+    font-size: 0.95rem;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+#historySearchInput:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.inventory-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+#inventorySearch {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-family: inherit;
+    font-size: 0.95rem;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+#inventorySearch:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* Bill History Modal */
+.bill-history-modal {
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.bill-history-container {
+    max-height: 450px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* Small action button in history list */
+.btn-small {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-small:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* Product ID badge on product card */
+.product-id {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+/* Login Modal */
+.login-modal {
+    max-width: 420px;
+}
+
+/* Product Edit Modal */
+.product-edit-modal {
+    max-width: 480px;
+}
+
+/* Checkout Modal */
+.checkout-modal {
+    max-width: 480px;
+}
+
+/* Cart panel — mobile full screen */
+@media (max-width: 1100px) {
+    .cart-panel {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 380px;
+        max-width: 90vw;
+        height: 100vh;
+        border-radius: 0;
+        z-index: 1500;
+        padding: 2rem 1.5rem;
+        transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+
+    .cart-panel.show {
+        right: 0;
+    }
+
+    .cart-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1400;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+    }
+
+    .cart-backdrop.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+/* Scroll utilities */
+.bill-history-container::-webkit-scrollbar,
+.cart-items::-webkit-scrollbar,
+.inventory-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.bill-history-container::-webkit-scrollbar-thumb,
+.cart-items::-webkit-scrollbar-thumb,
+.inventory-table-container::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 99px;
+}
+
+/* Print Styles — only show bill content */
+@media print {
+    body > *:not(#billModal) { display: none !important; }
+    #billModal {
+        display: block !important;
+        position: static !important;
+        background: none !important;
+    }
+    .modal-content {
+        box-shadow: none !important;
+        max-width: 100% !important;
+    }
+    .bill-actions { display: none !important; }
+    .close-modal-btn { display: none !important; }
+}
+

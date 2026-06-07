@@ -1,32 +1,212 @@
 [
-    { "id": 1, "name": "Banana", "price": 30.0, "icon": "🍌", "stock": 50 },
-    { "id": 2, "name": "Apple", "price": 120.0, "icon": "🍎", "stock": 40 },
-    { "id": 3, "name": "Milk", "price": 50.0, "icon": "🥛", "stock": 30 },
-    { "id": 4, "name": "Cheese", "price": 90.0, "icon": "🧀", "stock": 25 },
-    { "id": 5, "name": "Bread", "price": 40.0, "icon": "🍞", "stock": 35 },
-    { "id": 6, "name": "Butter", "price": 60.0, "icon": "🧈", "stock": 20 },
-    { "id": 7, "name": "Eggs", "price": 70.0, "icon": "🥚", "stock": 100 },
-    { "id": 8, "name": "Chicken", "price": 250.0, "icon": "🍗", "stock": 15 },
-    { "id": 9, "name": "Rice", "price": 80.0, "icon": "🍚", "stock": 60 },
-    { "id": 10, "name": "Wheat", "price": 40.0, "icon": "🌾", "stock": 80 },
-    { "id": 11, "name": "Oil", "price": 150.0, "icon": "🫗", "stock": 25 },
-    { "id": 12, "name": "Salt", "price": 20.0, "icon": "🧂", "stock": 100 },
-    { "id": 13, "name": "Sugar", "price": 40.0, "icon": "🍬", "stock": 70 },
-    { "id": 14, "name": "Coffee", "price": 140.0, "icon": "☕", "stock": 20 },
-    { "id": 15, "name": "Tea", "price": 100.0, "icon": "🫖", "stock": 30 },
-    { "id": 16, "name": "Soap", "price": 45.0, "icon": "🧼", "stock": 50 },
-    { "id": 17, "name": "Shampoo", "price": 110.0, "icon": "🧴", "stock": 20 },
-    { "id": 18, "name": "Toothpaste", "price": 50.0, "icon": "🪥", "stock": 40 },
-    { "id": 19, "name": "Biscuits", "price": 30.0, "icon": "🍪", "stock": 60 },
-    { "id": 20, "name": "Juice", "price": 60.0, "icon": "🧃", "stock": 45 },
-    { "id": 21, "name": "Chocolate", "price": 150.0, "icon": "🍫", "stock": 50 },
-    { "id": 22, "name": "Chips", "price": 40.0, "icon": "🍟", "stock": 100 },
-    { "id": 23, "name": "Yogurt", "price": 35.0, "icon": "🍦", "stock": 60 },
-    { "id": 24, "name": "Honey", "price": 250.0, "icon": "🍯", "stock": 15 },
-    { "id": 25, "name": "Pasta", "price": 60.0, "icon": "🍝", "stock": 45 },
-    { "id": 26, "name": "Tomato", "price": 40.0, "icon": "🍅", "stock": 80 },
-    { "id": 27, "name": "Potato", "price": 30.0, "icon": "🥔", "stock": 120 },
-    { "id": 28, "name": "Onion", "price": 35.0, "icon": "🧅", "stock": 90 },
-    { "id": 29, "name": "Garlic", "price": 20.0, "icon": "🧄", "stock": 50 },
-    { "id": 30, "name": "Ginger", "price": 30.0, "icon": "🫚", "stock": 40 }
+    {
+        "id": 1,
+        "name": "Banana",
+        "price": 30,
+        "icon": "🍌",
+        "stock": 50
+    },
+    {
+        "id": 2,
+        "name": "Apple",
+        "price": 120,
+        "icon": "🍎",
+        "stock": 40
+    },
+    {
+        "id": 3,
+        "name": "Milk",
+        "price": 50,
+        "icon": "🥛",
+        "stock": 25
+    },
+    {
+        "id": 4,
+        "name": "Cheese",
+        "price": 90,
+        "icon": "🧀",
+        "stock": 25
+    },
+    {
+        "id": 5,
+        "name": "Bread",
+        "price": 40,
+        "icon": "🍞",
+        "stock": 32
+    },
+    {
+        "id": 6,
+        "name": "Butter",
+        "price": 60,
+        "icon": "🧈",
+        "stock": 20
+    },
+    {
+        "id": 7,
+        "name": "Eggs",
+        "price": 70,
+        "icon": "🥚",
+        "stock": 100
+    },
+    {
+        "id": 8,
+        "name": "Chicken",
+        "price": 250,
+        "icon": "🍗",
+        "stock": 15
+    },
+    {
+        "id": 9,
+        "name": "Rice",
+        "price": 80,
+        "icon": "🍚",
+        "stock": 60
+    },
+    {
+        "id": 10,
+        "name": "Wheat",
+        "price": 40,
+        "icon": "🌾",
+        "stock": 80
+    },
+    {
+        "id": 11,
+        "name": "Oil",
+        "price": 150,
+        "icon": "🫗",
+        "stock": 25
+    },
+    {
+        "id": 12,
+        "name": "Salt",
+        "price": 20,
+        "icon": "🧂",
+        "stock": 100
+    },
+    {
+        "id": 13,
+        "name": "Sugar",
+        "price": 40,
+        "icon": "🍬",
+        "stock": 70
+    },
+    {
+        "id": 14,
+        "name": "Coffee",
+        "price": 140,
+        "icon": "☕",
+        "stock": 20
+    },
+    {
+        "id": 15,
+        "name": "Tea",
+        "price": 100,
+        "icon": "🫖",
+        "stock": 30
+    },
+    {
+        "id": 16,
+        "name": "Soap",
+        "price": 45,
+        "icon": "🧼",
+        "stock": 50
+    },
+    {
+        "id": 17,
+        "name": "Shampoo",
+        "price": 110,
+        "icon": "🧴",
+        "stock": 20
+    },
+    {
+        "id": 18,
+        "name": "Toothpaste",
+        "price": 50,
+        "icon": "🪥",
+        "stock": 40
+    },
+    {
+        "id": 19,
+        "name": "Biscuits",
+        "price": 30,
+        "icon": "🍪",
+        "stock": 60
+    },
+    {
+        "id": 20,
+        "name": "Juice",
+        "price": 60,
+        "icon": "🧃",
+        "stock": 45
+    },
+    {
+        "id": 21,
+        "name": "Chocolate",
+        "price": 150,
+        "icon": "🍫",
+        "stock": 47
+    },
+    {
+        "id": 22,
+        "name": "Chips",
+        "price": 40,
+        "icon": "🍟",
+        "stock": 100
+    },
+    {
+        "id": 23,
+        "name": "Yogurt",
+        "price": 35,
+        "icon": "🍦",
+        "stock": 60
+    },
+    {
+        "id": 24,
+        "name": "Honey",
+        "price": 250,
+        "icon": "🍯",
+        "stock": 15
+    },
+    {
+        "id": 25,
+        "name": "Pasta",
+        "price": 60,
+        "icon": "🍝",
+        "stock": 45
+    },
+    {
+        "id": 26,
+        "name": "Tomato",
+        "price": 40,
+        "icon": "🍅",
+        "stock": 80
+    },
+    {
+        "id": 27,
+        "name": "Potato",
+        "price": 30,
+        "icon": "🥔",
+        "stock": 120
+    },
+    {
+        "id": 28,
+        "name": "Onion",
+        "price": 35,
+        "icon": "🧅",
+        "stock": 90
+    },
+    {
+        "id": 29,
+        "name": "Garlic",
+        "price": 20,
+        "icon": "🧄",
+        "stock": 50
+    },
+    {
+        "id": 30,
+        "name": "Ginger",
+        "price": 30,
+        "icon": "🫚",
+        "stock": 40
+    }
 ]

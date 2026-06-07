@@ -140,6 +140,15 @@ app.get('/api/bills', (req, res) => {
     res.json(bills);
 });
 
+// DELETE all bills (Clear History)
+app.delete('/api/bills', (req, res) => {
+    if (writeJSON(BILLS_FILE, [])) {
+        res.json({ success: true, message: 'All bills deleted' });
+    } else {
+        res.status(500).json({ success: false, error: 'Failed to clear bill history' });
+    }
+});
+
 // Email endpoint for sending bills
 app.post('/api/send-bill', (req, res) => {
     try {

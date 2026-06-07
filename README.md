@@ -79,25 +79,6 @@ SuperMarketProject
 - Java JDK 8 or above
 - VS Code with Java Extension Pack
 
-### Steps
-
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/Supermarket-.git
-
-### Sample Output
-=========== BILL ===========
-Customer: MOKSH SHEOKAND
-Date    : 30-01-2026 02:26:43
-
-? Your Cart:
-Bread x4 = Rs.160.00
-Rice x3 = Rs.240.00
-Biscuits x10 = Rs.300.00
-Juice x5 = Rs.300.00
-Subtotal: Rs.1000.00
-GST (16%): Rs.160.00
-Total Payable: Rs.1160.00
 
 
 
